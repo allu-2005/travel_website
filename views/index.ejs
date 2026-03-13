@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= pageTitle %></title>
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="background-gradient"></div>
+    <header class="navbar">
+      <div class="logo">
+        <span class="logo-mark">✈</span>
+        <span class="logo-text">Smart Travel Planner</span>
+      </div>
+      <nav class="nav-links">
+        <a href="#planner">Planner</a>
+        <a href="#destinations">Destinations</a>
+        <a href="#tips">Travel Tips</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-text">
+          <h1>Plan your next adventure in seconds.</h1>
+          <p>
+            Enter your dream destination, budget, and trip length. Get a
+            personalized itinerary with attractions, activities, and live
+            weather – all in one place.
+          </p>
+          <div class="hero-highlight-cards">
+            <div class="highlight-card" data-highlight-target="itinerary" role="button" tabindex="0">
+              <h3>Smart Itineraries</h3>
+              <p>Daily plans tailored to your budget and days.</p>
+            </div>
+            <div class="highlight-card" data-highlight-target="weather" role="button" tabindex="0">
+              <h3>Live Weather</h3>
+              <p>Current conditions and forecast for your trip.</p>
+            </div>
+            <div class="highlight-card" data-highlight-target="destinations" role="button" tabindex="0">
+              <h3>Top Spots</h3>
+              <p>Must‑visit places and nearby attractions.</p>
+            </div>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="hero-card floating">
+            <img
+              src="https://images.pexels.com/photos/338515/pexels-photo-338515.jpeg?auto=compress&cs=tinysrgb&w=1200"
+              alt="Sunrise view of Paris cityscape"
+            />
+            <div class="hero-card-content">
+              <h2>Weekend in Paris</h2>
+              <p>Sunrise at the Eiffel Tower, café hopping, Seine cruise.</p>
+              <span class="tag">Popular</span>
+            </div>
+          </div>
+          <div class="hero-badges">
+            <button class="hero-badge" data-hero-action="auto-itinerary" type="button">
+              ⚡ Auto Itinerary
+            </button>
+            <button class="hero-badge" data-hero-action="weather" type="button">
+              🌤 Live Weather
+            </button>
+            <button class="hero-badge" data-hero-action="suggestions" type="button">
+              🗺 Smart Suggestions
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section id="planner" class="planner-section">
+        <div class="section-header">
+          <h2>Build your smart itinerary</h2>
+          <p>Fill in the details below and let the planner do the rest.</p>
+        </div>
+
+        <div class="planner-grid">
+          <form id="trip-form" class="trip-form">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="destination">Destination</label>
+                <input
+                  type="text"
+                  id="destination"
+                  placeholder="e.g. Paris, Tokyo, New York"
+                  required
+                  autocomplete="off"
+                />
+                <div id="destination-suggestions" class="suggestions-list"></div>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="budget">Total Budget ($)</label>
+                <input
+                  type="number"
+                  id="budget"
+                  placeholder="e.g. 1500"
+                  min="100"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="days">Number of Days</label>
+                <input
+                  type="number"
+                  id="days"
+                  placeholder="e.g. 5"
+                  min="1"
+                  max="21"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="travel-style">Travel Style</label>
+                <select id="travel-style">
+                  <option value="balanced" selected>Balanced explorer</option>
+                  <option value="relaxed">Relaxed & slow</option>
+                  <option value="packed">Packed with activities</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="interest">Main Interest</label>
+                <select id="interest">
+                  <option value="mixed" selected>Mixed highlights</option>
+                  <option value="culture">Culture & history</option>
+                  <option value="food">Food & cafés</option>
+                  <option value="nature">Nature & outdoors</option>
+                  <option value="nightlife">Nightlife & experiences</option>
+                </select>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-primary">
+              Generate Itinerary
+            </button>
+            <p class="form-hint">
+              The itinerary is generated instantly in your browser using curated
+              suggestions and live weather from Open‑Meteo.
+            </p>
+          </form>
+
+          <div class="weather-card" id="weather-card">
+            <div class="weather-header">
+              <h3>Weather overview</h3>
+              <span id="weather-location" class="weather-location"
+                >Destination not selected</span
+              >
+            </div>
+            <div id="weather-loading" class="weather-loading hidden">
+              Fetching live weather…
+            </div>
+            <div id="weather-error" class="weather-error hidden"></div>
+            <div id="weather-content" class="weather-content hidden">
+              <div class="weather-current">
+                <div>
+                  <div class="weather-temp" id="weather-temp">--°</div>
+                  <div class="weather-desc" id="weather-desc">—</div>
+                  <div class="weather-meta" id="weather-meta">—</div>
+                </div>
+                <div class="weather-icon" id="weather-icon">🌍</div>
+              </div>
+              <div class="weather-forecast" id="weather-forecast"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="destinations" class="destinations-section">
+        <div class="section-header">
+          <h2>Popular destinations</h2>
+          <p>Tap a card to autofill the planner with a curated trip.</p>
+        </div>
+
+        <div class="destinations-grid">
+          <article class="destination-card" data-destination="Paris, France" data-budget="1800" data-days="5">
+            <div
+              class="destination-image"
+              style="background-image: url('https://images.pexels.com/photos/338515/pexels-photo-338515.jpeg?auto=compress&cs=tinysrgb&w=800');"
+            ></div>
+            <div class="destination-body">
+              <h3>Paris</h3>
+              <p>Cafés, art museums, and sunset views along the Seine.</p>
+              <div class="chips">
+                <span class="chip">Culture</span>
+                <span class="chip">Food</span>
+                <span class="chip">City breaks</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="destination-card" data-destination="Tokyo, Japan" data-budget="2300" data-days="7">
+            <div
+              class="destination-image"
+              style="background-image: url('https://images.pexels.com/photos/208745/pexels-photo-208745.jpeg?auto=compress&cs=tinysrgb&w=800');"
+            ></div>
+            <div class="destination-body">
+              <h3>Tokyo</h3>
+              <p>Neon nights, tranquil temples, and unforgettable cuisine.</p>
+              <div class="chips">
+                <span class="chip">Nightlife</span>
+                <span class="chip">Food</span>
+                <span class="chip">Tech</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="destination-card" data-destination="Bali, Indonesia" data-budget="1400" data-days="6">
+            <div
+              class="destination-image"
+              style="background-image: url('https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=800');"
+            ></div>
+            <div class="destination-body">
+              <h3>Bali</h3>
+              <p>Beaches, rice terraces, and sunrise hikes above the clouds.</p>
+              <div class="chips">
+                <span class="chip">Nature</span>
+                <span class="chip">Relax</span>
+                <span class="chip">Adventure</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="destination-card" data-destination="New York, USA" data-budget="2000" data-days="4">
+            <div
+              class="destination-image"
+              style="background-image: url('https://images.pexels.com/photos/313782/pexels-photo-313782.jpeg?auto=compress&cs=tinysrgb&w=800');"
+            ></div>
+            <div class="destination-body">
+              <h3>New York</h3>
+              <p>Iconic skyline, Broadway shows, and world‑class museums.</p>
+              <div class="chips">
+                <span class="chip">City</span>
+                <span class="chip">Culture</span>
+                <span class="chip">Food</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="itinerary" class="itinerary-section">
+        <div class="section-header">
+          <h2>Your smart itinerary</h2>
+          <p>
+            Dynamically generated plans with suggested daily activities,
+            attractions, and time‑of‑day recommendations.
+          </p>
+        </div>
+
+        <div class="itinerary-summary-wrapper">
+          <div id="itinerary-summary" class="itinerary-summary empty-state">
+            <p id="itinerary-summary-text">
+              Fill in the planner above to generate your personalized travel schedule.
+            </p>
+          </div>
+          <label for="itinerary-notes" class="itinerary-notes-label">
+            Your trip notes
+          </label>
+          <textarea
+            id="itinerary-notes"
+            class="itinerary-notes"
+            placeholder="Add your own plans, booking references, packing reminders, or must‑visit spots here…"
+            rows="3"
+          ></textarea>
+        </div>
+
+        <div id="itinerary-container" class="itinerary-container"></div>
+      </section>
+
+      <section id="tips" class="tips-section">
+        <div class="section-header">
+          <h2>Smart travel tips</h2>
+          <p>Make every trip smoother, safer, and more memorable.</p>
+        </div>
+
+        <div class="tips-grid">
+          <div class="tip-card" role="button" tabindex="0">
+            <h3>Pack for layers</h3>
+            <p>
+              Weather can shift quickly. Combine lightweight layers instead of a
+              single heavy coat so you can adapt throughout the day.
+            </p>
+          </div>
+          <div class="tip-card" role="button" tabindex="0">
+            <h3>Save offline maps</h3>
+            <p>
+              Download city or region maps to your phone before you go. They
+              work even with spotty signal and save roaming data.
+            </p>
+          </div>
+          <div class="tip-card" role="button" tabindex="0">
+            <h3>Book key tickets early</h3>
+            <p>
+              Popular attractions often sell out. Reserve museums, famous
+              viewpoints, and special restaurants in advance.
+            </p>
+          </div>
+          <div class="tip-card" role="button" tabindex="0">
+            <h3>Balance busy & slow days</h3>
+            <p>
+              Alternate packed sightseeing days with slower ones to actually
+              rest and enjoy the atmosphere of your destination.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>Built with ❤️ for curious travelers. Data from Open‑Meteo.</p>
+    </footer>
+
+    <script src="/script.js"></script>
+  </body>
+</html>
+
