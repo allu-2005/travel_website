@@ -15,7 +15,7 @@ app.get("/", (req, res) => {
   });
 });
 
-const port = Number.parseInt(process.env.PORT, 10) || 3000;
+const port = Number.parseInt(process.env.PORT, 10) || 4000;
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
